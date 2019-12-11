@@ -1,9 +1,9 @@
 <?php 
-error_reporting(E_ERROR);
+error_reporting(E_ALL);
 //require_once('startsession.php');
 
     // previous form from where it should come 
-define('URLFORM', 'http://localhost/login.php');
+/*efine('URLFORM', 'http://localhost/login.php');
 
 // current form address
 define('URLLIST', 'http://localhost/adminpage.php');
@@ -12,7 +12,7 @@ $referer= $_SERVER['HTTP_REFERER'];
 //if referer is not the form redirect the browser to the previous form
 if($referer != URLFORM && $referer!=URLLIST){
     header('Location: '.URLFORM);
-}
+}*/
 
 
 
@@ -97,7 +97,7 @@ $link = mysqli_connect($host, $userr, $passwd, $dbname);
         
      }
             
-           
+            
              $query= "SELECT student_id FROM students WHERE groups = '$selected_group'";
      if (!($result = mysqli_query($link, $query)))
      {
@@ -155,8 +155,6 @@ $link = mysqli_connect($host, $userr, $passwd, $dbname);
             $search_query = "SELECT student_id, grade, email, groups FROM students ";
             $search_query.= " WHERE grade $elg";
             $search_query.=" $selected_grades";
-            
-           
             switch ($sort) {
                 case 1:
                     $search_query.=" ORDER BY grade DESC";
@@ -178,7 +176,6 @@ $link = mysqli_connect($host, $userr, $passwd, $dbname);
         $order = $_POST['order'];
       
            $query=  build_query($selected_grades,$elg, $order);
-            
             $result = mysqli_query($link, $query);
          echo "<table align='center'><thead align='center'><tr><th>Row</th>";
             $fields = mysqli_fetch_fields($result);

@@ -13,7 +13,7 @@ $captchaString="";
 $charArray = array('a','b','c','d','e','f','g','h','j','k','m','n','p','q','r','s','t','u','v','w','x','y','z','2','3','4','6','7','8','9');
 shuffle($charArray);
 $captchaString = $charArray[0];
-for ($i=1; $i<5; $i++) $captchaString .= ' ' . $charArray[$i];
+for ($i=1; $i<5; $i++) $captchaString .=  $charArray[$i];
 $_SESSION['pass_phrase'] = $captchaString;
 # Edit the image
 ImageString($image, 5, 10, 10, $captchaString, $textColour);

@@ -3,27 +3,33 @@
 
 <?php 
 error_reporting(E_ALL);
+//require_once('startsession.php');
 
 
 
-
-    // previous form from where it should come 
+   // previous form from where it should come 
 define('URLFORM', 'http://localhost/login.php');
 
 // current form address
-define('URLLIST', 'http://localhost/loginServerSide.php');
+define('URLLIST', 'http://localhost/studentloginServerSide.php');
 $referer= $_SERVER['HTTP_REFERER'];
 
 //if referer is not the form redirect the browser to the previous form
-if($referer != URLFORM && $referer!=URLIST){
+if($referer!= URLLIST && $referer != URLFORM) {
     header('Location: '.URLFORM);
     
     
     
     //if (isset($_COOKIE['user']))
-        
-    
 }
+
+
+if (!isset($_SESSION['user'])){
+    if(isset($_COOKIE['user'])){
+        $_SESSION['user']=$_COOKIE['user'];
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,10 +61,10 @@ table, th, td {
         extract($_POST);
         $studentId = $_COOKIE['user'];
         $link = mysqli_connect($host, $userr, $passwd, $dbname);
-     
         
 
-          $query= "SELECT student_id, email, groups FROM students WHERE groups IN (SELECT DISTINCT groups FROM students WHERE student_id = $studentId)";
+
+          $query= "SELECT student_id, email, groups FROM students WHERE groups IN (SELECT DISTINCT groups FROM students WHERE student_id = '$studentId')";
     
   
        // $query= "SELECT groups FROM student WHERE student_id = $studentId";
@@ -103,16 +109,7 @@ table, th, td {
         
          
            $opt = "<select name='stuid'>";
-        
-        
-         /*while($row = mysqli_fetch_assoc($result))
-         {
-             
-             $opt .="<option value='{$row['student_id']}'>{$row['student_id']}</option>\n";
-         }*/
-        
-        
-               
+
                 
                 for ($j = 0; $j<mysqli_num_rows($result); $j++){
                     $row = mysqli_fetch_assoc($result);
@@ -129,18 +126,41 @@ table, th, td {
          $opt .="</select>";
        
         }
-    
+
+         
      
-        
+     if (isset($_POST['ratestudent'])){
+            $selected_id =$_POST['stuid'];
+         $rating = $_POST['rating'];
+         $comment = mysqli_real_escape_string($link, trim($_POST['comment']));
+
+         $userfile =$_POST['userfile']; 
+           // echo $selected_id;
+         
+            
+             $query= "INSERT INTO ratings (rater_id, rating, comment, image, rated_id) VALUES 
+             ('$studentId', $rating, '$comment', '$userfile', '$selected_id')";
+     $result = mysqli_query($link, $query);
+          
+                echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 25px"> Student Rated!!';
+         
+            
+            $comment="";
+            $userfile="";
     
-$link->close();
+        }
+         
+
+       
+
+
 
 ?>
         <div class="container"><br>
 		
 		<div class="col-lg-6 m-auto d-block">
 			
-			<form action="studentsaverating.php"  class="bg-light"
+			<form action="<?php echo $_SERVER['PHP_SELF'];?>"  class="bg-light"
                 method="post" >
 				
 				<div class="form-group">
@@ -179,7 +199,7 @@ $link->close();
 					<input type="file" name="userfile" id="userfile" accept="image/*">
 				</div>
                 <div class="form-group">
-					<label class="font-weight-bold" >Logged In Student</label>
+					<?php    echo '&#10084;Logged-in Student ID:  ('.$_COOKIE['user']. ')';  ?>
 				
 				</div>
                    
@@ -188,11 +208,26 @@ $link->close();
 
  <?php
 echo $opt;
+                
+                
+                 $query = "SELECT rating FROM ratings WHERE rater_id = $studentId";
+                         $result = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($result) >=3){
+                             echo '<input type="submit" id="ratestudent" disabled';
+                         }  else {
+                             echo "";
+                         }
+                
+                
+                    
+$link->close();
 
 ?>
               
    
-	<input type="button" name="ratestudent" value="Rate Student" class="btn btn-success">
+	<input type="submit" id="ratestudent" name="ratestudent" value="Submit" class="btn btn-success">
+             
+                <input type="submit" id="delete" name="delete" value="Delete" class="btn btn-success">
                 
                                 
 </form><br><br>

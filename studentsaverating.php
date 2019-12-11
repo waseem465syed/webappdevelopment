@@ -1,5 +1,6 @@
 <?php 
 error_reporting(E_ALL);
+require_once('startsession.php');
 
 /*    // previous form from where it should come 
 define('URLFORM', 'http://localhost/login.html');
@@ -44,10 +45,7 @@ table, th, td {
 
 <?php
          
-        $host = 'localhost';
-        $userr = 'waseem';
-        $passwd= 'localhost';
-        $dbname= 'waseem';
+    require_once('connection.php');
         $query='SHOW TABLES';
         extract($_POST);
 

@@ -3,7 +3,7 @@ session_start();
 error_reporting(E_ERROR);
 
 
-    // previous form from where it should come 
+/*    // previous form from where it should come 
 define('URLFORM', 'http://localhost/login.php');
 
 // current form address
@@ -13,7 +13,7 @@ $referer= $_SERVER['HTTP_REFERER'];
 //if referer is not the form redirect the browser to the previous form
 if($referer != URLFORM && $referer!=URLIST){
     header('Location: '.URLFORM);
-}
+}*/
 
 
 
@@ -75,23 +75,23 @@ $user_pass_phrase =mysqli_real_escape_string($link, trim($_POST['verify']));
 
 	<div class="container"><br>
 		
-		<div class="col-lg-6 m-auto d-block">
+		 <div style="padding: 25px; background-color: #98AFC7;">
 			
 			<form method="post" id="myForm" action="<?php echo $_SERVER['PHP_SELF'];?>" onsubmit="return validation()" class="bg-light">
 				
-				<div class="form-group">
+				<div style="padding: 25px; background-color: #E5E4E2;">
 					<label for="user" class="font-weight-bold"> Student ID: </label>
 					<input type="text"  value="<?php echo $studentId;?>" name="user" class="form-control" id="user"  placeholder="Insert 9 digits student ID" pattern="[0-9]*">
 					<span id="username" class="text-danger font-weight-bold"> </span>
 				</div>
 
-				<div class="form-group">
+				<div style="padding: 25px; background-color: #BCC6CC;">
 					<label class="font-weight-bold"> Password: </label>
 					<input type="password" name="pass" class="form-control" id="pass" autocomplete="off">
 					<span id="passwords" class="text-danger font-weight-bold"> </span>
 				</div>
 
-				<div class="form-group">
+				<div style="padding: 25px; background-color: #BCC6CC;">
 					<label class="font-weight-bold"> Confirm Password: </label>
 					<input type="password" name="conpass" class="form-control" id="conpass" autocomplete="off">
 					<span id="confrmpass" class="text-danger font-weight-bold"> </span>
@@ -99,29 +99,69 @@ $user_pass_phrase =mysqli_real_escape_string($link, trim($_POST['verify']));
 
 			
 
-				<div class="form-group">
+				<div style="padding: 25px; background-color: #E5E4E2;">
 					<label class="font-weight-bold"> Email: </label>
-					<input type="text" value="<?php echo $eMail;?>" name="email" class="form-control" id="email" >
+					<input type="text" value="<?php echo $eMail;?>" name="email" placeholder="@greenwich.ac.uk" class="form-control" id="email" >
 					<span id="emailids" class="text-danger font-weight-bold"> </span>
 				</div>
-            
+            <div style="padding: 25px; background-color: #BCC6CC;">
                                          
                <label class="font-weight-bold">Select Group</label>
             <select name="groupno" id="groupno">
                 
-                 <option value="1">Group 1</option>
-                 <option value="2">Group 2</option>
-                 <option value="3">Group 3</option>
-                 <option value="4">Group 4</option>
-                 <option value="5">Group 5</option>
-                 <option value="6">Group 6</option>
-                 <option value="7">Group 7</option>
-                 <option value="8">Group 8</option>
-                 <option value="9">Group 9</option>
-                 <option value="10">Group 10</option>    
+                 <option value="1" <?php $query = "SELECT groups FROM students WHERE groups = 1";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==3){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 1</option>
+                 <option value="2"<?php $query = "SELECT groups FROM students WHERE groups = 2";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==3){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 2</option>
+                 <option value="3"<?php $query = "SELECT groups FROM students WHERE groups = 3";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==3){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 3</option>
+                 <option value="4"<?php $query = "SELECT groups FROM students WHERE groups = 4";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==3){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 4</option>
+                 <option value="5"<?php $query = "SELECT groups FROM students WHERE groups = 5";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==3){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 5</option>
+                 <option value="6"<?php $query = "SELECT groups FROM students WHERE groups = 6";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==3){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 6</option>
+                 <option value="7"<?php $query = "SELECT groups FROM students WHERE groups = 7";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==3){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 7</option>
+                 <option value="8"<?php $query = "SELECT groups FROM students WHERE groups = 8";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==3){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 8</option>
+                 <option value="9"<?php $query = "SELECT groups FROM students WHERE groups = 9";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==3){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 9</option>
+                 <option value="10"<?php $query = "SELECT groups FROM students WHERE groups = 10";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==3){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 10</option>    
             </select>
-                
-                <div class="form-group">
+                </div>
+               <div style="padding: 25px; background-color: #E5E4E2;">
        <label for="verify">Verification</label>
                 <input type="text" id="verify" name="verify" placeholder="Enter the pass-phrase"/>
                 <img src="captcha3.php" alt="Verification pass-phrase"/>
@@ -143,7 +183,11 @@ $user_pass_phrase =mysqli_real_escape_string($link, trim($_POST['verify']));
         $query="INSERT INTO students (student_id, password, grade, email, groups) VALUES ('$studentId', SHA('$userPasswd'), '', '$eMail', $groupId)";
         mysqli_query($link, $query);
         echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 25px"> Account created successfully!!';
-          
+            
+                           
+     $link->close();
+                          
+                         
                     
                          
            
@@ -159,12 +203,12 @@ $user_pass_phrase =mysqli_real_escape_string($link, trim($_POST['verify']));
                      }
                      
 
-         $link->close();
+       
         
                       }
          
     
-   
+     $link->close();
                 
 
     ?>         

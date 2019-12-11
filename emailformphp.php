@@ -1,28 +1,24 @@
 <?php
 error_reporting(E_ERROR);
 
-session_start();
-session_destroy();
-if (isset($_SESSION['user'])){
-$user=$_SESSION['user'];
-$email=$_SESSION['email'];
+
+if (!isset($_SESSION['user'])){
+    if(isset($_COOKIE['user'])){
+        $_SESSION['user']=$_COOKIE['user'];
+    }
 }
 
 
-/*
-setcookie('user', $_POST['user'], time()+3600);
-setcookie('ebody', $_POST['user'], time()+3600);
-*/
        
    require_once('connection.php');
         $query='SHOW TABLES';
         extract($_POST);
-
+$link = mysqli_connect($host, $userr, $passwd, $dbname);
 error_reporting(0);   
 
-        $from= 'waseem465@gmail.com';
-        $mailbody = $_POST['ebody'];
-        $subject = $_POST['subject'];
+        $from= 'ws9766e@greenwich.ac.uk';
+        $mailbody =mysqli_real_escape_string($link, trim($_POST['ebody']));
+        $subject =mysqli_real_escape_string($link, trim($_POST['subject']));
         $groupId = $_POST['groupno'];
   $studentId = $_COOKIE['user'];
     
@@ -48,10 +44,10 @@ error_reporting(0);
 <?php  echo '&#10084; <a href="logout.php">Log Out ('.$_COOKIE['user']. ')</a>'; ?>
 	<div class="container"><br>
 		
-		<div class="col-lg-6 m-auto d-block">
+		 <div style="padding: 25px; background-color: #E5E4E2;">
 			
 			<form method="post" id="myForm" action="<?php echo $_SERVER['PHP_SELF'];?>"  class="bg-light">
-                                                 
+                <div style="padding: 25px; background-color: #98AFC7;">                                  
                <label class="font-weight-bold">Select Group</label>
             <select name="groupno" id="groupno">
                 
@@ -66,49 +62,43 @@ error_reporting(0);
                  <option value="9">Group 9</option>
                  <option value="10">Group 10</option>    
             </select>
+                </div>
 				
-				<div class="form-group">
-					<label for="user" class="font-weight-bold"> Subject: </label>
-					<input type="text" value="<?php echo $subject;?>" name="subject" class="form-control" id="subject" >
-					
-				</div>
+				
+            
 
 		
-				<div class="form-group">
-					<label class="font-weight-bold"> Body</label>
-					<textarea rows="4" cols= "50" name="ebody" class="form-control" id="ebody"><?php echo $mailbody;?></textarea>
-					
-				</div>
+				
 
-
+				<input type="submit" name="reminder" value="Send Reminder" id="reminder" class="btn btn-success" 	autocomplete="off">
 				
         
 
-				<input type="submit" name="submit" value="Send" id="submit" class="btn btn-success" 	autocomplete="off">
+				<input type="submit" name="submit" value="Send Final Grades" id="submit" class="btn btn-success" 	autocomplete="off">
 <?php
                 if (isset($_POST['submit'])){
-                    if(!empty($subject) && (!empty($mailbody))){
-        $link = mysqli_connect($host, $userr, $passwd, $dbname) or die('Error connecting to mysql server');    
-          $query= "SELECT email FROM students WHERE groups = $groupId";
+                   
+            
+          $query= "SELECT student_id, email, grade FROM students WHERE groups = $groupId";
     
        $result = mysqli_query($link, $query) or die('Error querying database');
             
          while($row=mysqli_fetch_array($result)){
-                $msg = "Dear Student, \n $mailbody";
+                $student= $row['student_id'];
                 $to =$row['email'];
-                mail($to, $subject, $msg, 'From:'.$from);
-                echo 'Email sent to: '.$to.'<br/>';
+             $grade= $row['grade'];
+             $msg = "Dear Student, \n $student"; 
+             $msg.= " Your Final Grades are: $grade";
+            $msg.=  " $mailbody";
+                mail($to,  $msg, 'From:'.$from);
+             
+             echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 15px">'.$msg.'<br/>';
+             echo '<p class="text-yellow text-center font-weight-bold bg-success" style="font-size: 15px">Email sent to: '.$to;
            
             }  
- 
-        } 
-     
-    else {
-                echo 'You forgot the email subject and/or body text.<br />';
-            }
        
  }
-                ?>
+ ?>
 			</form><br><br>
 
 
