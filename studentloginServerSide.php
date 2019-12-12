@@ -168,10 +168,17 @@ table, th, td {
         
          $userfile =$_POST['userfile']; 
            // echo $selected_id;
-         if (isset($_POST['frating'])){
+         if (isset($_POST['final_rating'])){
+
+                    $query = "SELECT*FROM finalratings WHERE rater_id = $studentId AND rated_id=$selected_id";
+                     $result = mysqli_query($link, $query);
+                      if (mysqli_num_rows($result)==0){
             
-           $query= "INSERT INTO ratings (rater_id, rating, comment, image, rated_id, final_rating, groups) VALUES 
-             ('$studentId', $rating, '$comment', '$userfile', '$selected_id', $rating, $group)";
+           $query= "INSERT INTO ratings (rater_id, rating, comment, image, rated_id) VALUES 
+             ('$studentId', $rating, '$comment', '$userfile', '$selected_id')";
+     $result = mysqli_query($link, $query);
+              $query= "INSERT INTO finalratings (rated_id, final_rating, groups, rater_id) VALUES 
+             ('$selected_id', $rating, $group, '$studentId')";
      $result = mysqli_query($link, $query);
              
              $query =  "SELECT grade FROM students WHERE student_id = $selected_id";
@@ -182,15 +189,12 @@ table, th, td {
           $query = "UPDATE students SET grade= ($rating+ $rating)/2 WHERE student_id = $selected_id";
              $result = mysqli_query($link, $query);
                 echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 25px"> Final grade udpated!!';
-                             
+                         }
     
         } else {
-           
-                             
-                      $query= "INSERT INTO students (rater_id) VALUES 
-             ('$rating') WHERE student_id= $selected_id";
-     $result = mysqli_query($link, $query);       
-             echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 25px"> Student Rated!!';
+                           echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 25px">This Student ID already rated.. please select another student Id to rate';
+                
+          
         }
          
 
@@ -198,10 +202,20 @@ table, th, td {
      } else {
              
              
+              $query = "SELECT*FROM ratings WHERE rater_id = $studentId AND rated_id=$selected_id";
+                     $result = mysqli_query($link, $query);
+                      if (mysqli_num_rows($result)==0){
+             
+             
            $query= "INSERT INTO ratings (rater_id, rating, comment, image, rated_id) VALUES 
              ('$studentId', $rating, '$comment', '$userfile', '$selected_id')";
      $result = mysqli_query($link, $query);
              echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 25px"> Student Rated!!';
+                      }
+             else {
+                  echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 25px">This Student ID already rated.. please select another student Id to rate';
+                
+             }
      }
 
      }
@@ -258,7 +272,20 @@ table, th, td {
 
  <?php
 echo $opt;
+                  
+                 
+                 $query = "SELECT final_rating FROM finalratings WHERE rater_id = $studentId";
+                         $result = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($result) >=2){
+                             echo '<input type="submit" id="ratestudent" disabled';
+                          
+                         }  else {
+                             echo "";
+                         }
                 
+                                
+                  
+             
     
                 
                  $query = "SELECT rating FROM ratings WHERE rater_id = $studentId";
@@ -283,7 +310,7 @@ echo $opt;
                 
                 
                 <?php 
-                 $query = "SELECT final_rating FROM ratings WHERE rater_id = $studentId";
+                 $query = "SELECT final_rating FROM finalratings WHERE rater_id = $studentId";
                          $result = mysqli_query($link, $query); 
                          if (mysqli_num_rows($result) >=2){
                              echo '<input type="submit" id="delete" disabled';
@@ -293,13 +320,25 @@ echo $opt;
                          }
                 
                                 
-                    
-                    $link->close();
+                  
               ?>
     <input type="submit" id="delete" name="delete" value="Delete" class="btn btn-success">
                 
                 
-                 
+                  <?php 
+                 $query = "SELECT final_rating FROM finalratings WHERE rater_id = $studentId";
+                         $result = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($result) >=2){
+                             echo '<input type="submit" id="update" disabled';
+                          
+                         }  else {
+                             echo "";
+                         }
+                
+                                
+                    
+                    $link->close();
+              ?>
                
                  
 	<input type="submit" id="update" name="update" value="Change" class="btn btn-success">

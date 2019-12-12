@@ -53,52 +53,52 @@ $groupId2 = $_POST['groupno2'];
                <label class="font-weight-bold">Select Completed Group</label>
             <select name="groupno" id="groupno">
                 
-                 <option value="1"  <?php $query = "SELECT groups FROM ratings WHERE groups = 1";
+                 <option value="1"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 1";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) !=6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 1</option>
-                 <option value="2"  <?php $query = "SELECT groups FROM ratings WHERE groups = 2";
+                 <option value="2"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 2";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) !=6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 2</option>
-                 <option value="3"  <?php $query = "SELECT groups FROM ratings WHERE groups = 3";
+                 <option value="3"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 3";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) !=6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 3</option>
-                 <option value="4" <?php $query = "SELECT groups FROM ratings WHERE groups = 4";
+                 <option value="4" <?php $query = "SELECT groups FROM finalratings WHERE groups = 4";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) !=6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 4</option>
-                 <option value="5"  <?php $query = "SELECT groups FROM ratings WHERE groups = 5";
+                 <option value="5"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 5";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) !=6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 5</option>
-                 <option value="6" <?php $query = "SELECT groups FROM ratings WHERE groups = 6";
+                 <option value="6" <?php $query = "SELECT groups FROM finalratings WHERE groups = 6";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) !=6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 6</option>
-                 <option value="7"  <?php $query = "SELECT groups FROM ratings WHERE groups = 7";
+                 <option value="7"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 7";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) !=6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 7</option>
-                 <option value="8"  <?php $query = "SELECT groups FROM ratings WHERE groups = 8";
+                 <option value="8"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 8";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) !=6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 8</option>
-                 <option value="9"  <?php $query = "SELECT groups FROM ratings WHERE groups = 9";
+                 <option value="9"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 9";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) !=6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 9</option>
-                 <option value="10"  <?php $query = "SELECT groups FROM ratings WHERE groups = 10";
+                 <option value="10"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 10";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) !=6){
                              echo "<select='groupno' id='groupno' disabled";
@@ -118,52 +118,52 @@ $groupId2 = $_POST['groupno2'];
                <label class="font-weight-bold">Select incomplete Group for Reminder</label>
             <select name="groupno2" id="groupno2">
                 
-                 <option value="1"  <?php $query = "SELECT groups FROM ratings WHERE groups = 1";
+                 <option value="1"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 1";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) ==6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 1</option>
-                 <option value="2"  <?php $query = "SELECT groups FROM ratings WHERE groups = 2";
+                 <option value="2"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 2";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) ==6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 2</option>
-                 <option value="3"  <?php $query = "SELECT groups FROM ratings WHERE groups = 3";
+                 <option value="3"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 3";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) ==6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 3</option>
-                 <option value="4" <?php $query = "SELECT groups FROM ratings WHERE groups = 4";
+                 <option value="4" <?php $query = "SELECT groups FROM finalratings WHERE groups = 4";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) ==6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 4</option>
-                 <option value="5"  <?php $query = "SELECT groups FROM ratings WHERE groups = 5";
+                 <option value="5"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 5";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) ==6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 5</option>
-                 <option value="6" <?php $query = "SELECT groups FROM ratings WHERE groups = 6";
+                 <option value="6" <?php $query = "SELECT groups FROM finalratings WHERE groups = 6";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) ==6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 6</option>
-                 <option value="7"  <?php $query = "SELECT groups FROM ratings WHERE groups = 7";
+                 <option value="7"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 7";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) ==6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 7</option>
-                 <option value="8"  <?php $query = "SELECT groups FROM ratings WHERE groups = 8";
+                 <option value="8"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 8";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) ==6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 8</option>
-                 <option value="9"  <?php $query = "SELECT groups FROM ratings WHERE groups = 9";
+                 <option value="9"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 9";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) ==6){
                              echo "<select='groupno' id='groupno' disabled";
                          }?>>Group 9</option>
-                 <option value="10"  <?php $query = "SELECT groups FROM ratings WHERE groups = 10";
+                 <option value="10"  <?php $query = "SELECT groups FROM finalratings WHERE groups = 10";
                          $data = mysqli_query($link, $query); 
                          if (mysqli_num_rows($data) ==6){
                              echo "<select='groupno' id='groupno' disabled";

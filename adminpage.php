@@ -269,7 +269,7 @@ $link = mysqli_connect($host, $userr, $passwd, $dbname);
             $selected_id =$_POST['stuid'];
            // echo $selected_id;
             
-             $query= "SELECT students.student_id, students.grade, students.email, students.groups, ratings.final_rating, ratings.comment, ratings.image, ratings.rater_id FROM students INNER JOIN ratings ON (ratings.rated_id = students.student_id) WHERE students.student_id= $selected_id"; 
+             $query= "SELECT students.student_id, students.grade, students.email, students.groups, ratings.rating, ratings.comment, ratings.image, ratings.rater_id FROM students INNER JOIN ratings ON (ratings.rated_id = students.student_id) WHERE students.student_id= $selected_id"; 
         if (!($result = mysqli_query($link, $query))){
             printError(sprintf("Error %s : %s", mysqli_errno($link), mysqli_error($link)));
         }else {
