@@ -1,29 +1,20 @@
 <?php 
 error_reporting(E_ERROR);
 //require_once('startsession.php');
-
     // previous form from where it should come 
-define('URLFORM', 'http://localhost/login.php');
-
+/*define('URLFORM', 'https://stuweb.cms.gre.ac.uk/~ws9766e/web/login.php');
 // current form address
-define('URLLIST', 'http://localhost/adminpage.php');
+define('URLLIST', 'https://stuweb.cms.gre.ac.uk/~ws9766e/web/adminpagetest.php');
 $referer= $_SERVER['HTTP_REFERER'];
-
 //if referer is not the form redirect the browser to the previous form
 if($referer != URLFORM && $referer!=URLLIST){
     header('Location: '.URLFORM);
-}
-
-
-
-
-
+}*/
 if (!isset($_SESSION['user'])){
     if(isset($_COOKIE['user'])){
         $_SESSION['user']=$_COOKIE['user'];
     }
 }
-
 ?>
 <html>
 <head>
@@ -34,7 +25,6 @@ if (!isset($_SESSION['user'])){
 thead {color:green;}
 tbody {color:blue;}
 tfoot {color:red;}
-
 table, th, td {
   border: 1px solid black;
 }
@@ -50,7 +40,6 @@ table, th, td {
         require_once('connection.php');
         $query='SHOW TABLES';
         extract($_POST);
-
   $studentId = $_COOKIE['user'];
   $elg = $_POST['av'];
         $order = $_POST['order'];
@@ -60,7 +49,6 @@ table, th, td {
         echo '&#10084; <a href="logout.php">Log Out ('.$_COOKIE['user']. ')</a>';   
         
 $link = mysqli_connect($host, $userr, $passwd, $dbname);
-
     
     
      
@@ -123,12 +111,10 @@ $link = mysqli_connect($host, $userr, $passwd, $dbname);
                     if($row['student_id']!=$studentId){
                   
                    $opt .="<option value='{$row['student_id']}'>{$row['student_id']}</option>\n";
-
                   } else {
                       $newstu = $row['student_id'];
                   }
                 }
-
          $opt .="</select>";
     //  $selectedoption = $_POST['stuid'];
        
@@ -148,9 +134,44 @@ $link = mysqli_connect($host, $userr, $passwd, $dbname);
                  return $result; 
              }
         */
+        function build_query(){
+            
+            $search_query = "SELECT student_id, grade, email, groups FROM students ";
+           
+            return $search_query;
+            
+        }
         
+          function build_query1( $sort){
+            
+            $search_query = "SELECT student_id, grade, email, groups FROM students ";
+            
+           
+            switch ($sort) {
+                case 1:
+                    $search_query.=" ORDER BY grade DESC";
+                    break;
+                    
+                case 2: 
+                    $search_query.= " ORDER BY grade ASC";
+                    break;
+                default:
+                    
+            }
+            return $search_query;
+            
+        }
         
-        function build_query($selected_grades,$elg, $sort){
+        function build_query2($selected_grades,$elg){
+            
+            $search_query = "SELECT student_id, grade, email, groups FROM students ";
+            $search_query.= " WHERE grade $elg";
+            $search_query.=" $selected_grades";
+            
+            return $search_query;
+            
+        }
+        function build_query3($selected_grades,$elg, $sort){
             
             $search_query = "SELECT student_id, grade, email, groups FROM students ";
             $search_query.= " WHERE grade $elg";
@@ -173,11 +194,15 @@ $link = mysqli_connect($host, $userr, $passwd, $dbname);
         }
         
             if (isset($_POST['search'])){
-            $selected_grades =$_POST['grades'];
-             $elg = $_POST['av'];
-        $order = $_POST['order'];
+                $selected_grades =$_POST['grades'];
+                $elg = $_POST['av'];
+                $order = $_POST['order'];
+                
+                if (isset($_POST['av']) && isset($_POST['order'])){
+   
       
-           $query=  build_query($selected_grades,$elg, $order);
+                    
+           $query=  build_query3($selected_grades,$elg, $order);
             
             $result = mysqli_query($link, $query);
          echo "<table align='center'><thead align='center'><tr><th>Row</th>";
@@ -201,6 +226,35 @@ $link = mysqli_connect($host, $userr, $passwd, $dbname);
             }
                               
             echo "</tbody></table>";
+            }
+             
+                
+                else {
+                      $query=  build_query1($order);
+            
+            $result = mysqli_query($link, $query);
+         echo "<table align='center'><thead align='center'><tr><th>Row</th>";
+            $fields = mysqli_fetch_fields($result);
+            for ($i = 0; $i<mysqli_num_fields($result); $i++){
+                echo "<th>" . $fields[$i]->name . "</th>\n";
+            }
+            echo "</tr></thead>\n<tbody>";
+            echo "</tr></thead>\n<tbody>";
+            for ($i = 0; $i<mysqli_num_rows($result); $i++){
+                echo "<tr align='center'><td align='center'>" . ($i + 1) . "</td>";
+             
+                $row = mysqli_fetch_row($result);
+                for ($j = 0; $j<mysqli_num_fields($result); $j++){
+                    echo "<td align='center' >&nbsp;".$row[$j] . "</td>";
+                    
+                    
+                }
+               // echo "<td>"."<input type=submit name=update value=Profile method=post"." </td>";
+                echo "</tr>\n";
+            }
+                              
+            echo "</tbody></table>";
+                }
         }
                               
            
@@ -215,7 +269,7 @@ $link = mysqli_connect($host, $userr, $passwd, $dbname);
             $selected_id =$_POST['stuid'];
            // echo $selected_id;
             
-             $query= "SELECT students.student_id, students.grade, students.email, students.groups, ratings.rating, ratings.comment, ratings.image, ratings.rater_id FROM students INNER JOIN ratings ON (ratings.rated_id = students.student_id) WHERE students.student_id= $selected_id"; 
+             $query= "SELECT students.student_id, students.grade, students.email, students.groups, ratings.final_rating, ratings.comment, ratings.image, ratings.rater_id FROM students INNER JOIN ratings ON (ratings.rated_id = students.student_id) WHERE students.student_id= $selected_id"; 
         if (!($result = mysqli_query($link, $query))){
             printError(sprintf("Error %s : %s", mysqli_errno($link), mysqli_error($link)));
         }else {
@@ -247,8 +301,6 @@ $link = mysqli_connect($host, $userr, $passwd, $dbname);
     
          $link->close();
     
-
-
 ?>
           <div class="container"><br>
 		
@@ -297,9 +349,9 @@ $link = mysqli_connect($host, $userr, $passwd, $dbname);
             </select>
                 <input type="radio" name="av" value="<"> Less than
 <input type="radio" name="av" value=">"> Greater than
-                    <input type="radio" name="av" value="=" checked="checked"> Equal to
+                    <input type="radio" name="av" value="="> Equal to
                      <input type="submit" class="btn btn-success" formaction="" name=search value="Search">  
-                     <input type="radio" name="order" value="2" checked="checked"> Ascending
+                     <input type="radio" name="order" value="2" > Ascending
                      <input type="radio" name="order" value="1"> Desending
 				</div>
         

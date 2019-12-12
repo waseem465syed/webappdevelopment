@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 
 
    // previous form from where it should come 
-define('URLFORM', 'http://localhost/login.php');
+/*define('URLFORM', 'http://localhost/login.php');
 
 // current form address
 define('URLLIST', 'http://localhost/studentloginServerSide.php');
@@ -17,16 +17,15 @@ $referer= $_SERVER['HTTP_REFERER'];
 //if referer is not the form redirect the browser to the previous form
 if($referer!= URLLIST && $referer != URLFORM) {
     header('Location: '.URLFORM);
-    
-    
-    
-    //if (isset($_COOKIE['user']))
-}
+
+
+}*/
 
 
 if (!isset($_SESSION['user'])){
-    if(isset($_COOKIE['user'])){
+    if(isset($_COOKIE['user']) && isset($_COOKIE['group'])){
         $_SESSION['user']=$_COOKIE['user'];
+        $_SESSION['group']=$_COOKIE['group'];
     }
 }
 
@@ -60,13 +59,20 @@ table, th, td {
         $query='SHOW TABLES';
         extract($_POST);
         $studentId = $_COOKIE['user'];
+      
         $link = mysqli_connect($host, $userr, $passwd, $dbname);
         
-
+        $query = "SELECT groups FROM students WHERE student_id= $studentId";
+        
 
           $query= "SELECT student_id, email, groups FROM students WHERE groups IN (SELECT DISTINCT groups FROM students WHERE student_id = '$studentId')";
-    
-  
+        $result = mysqli_query($link, $query);
+            while($row=mysqli_fetch_array($result)){
+                
+                setcookie('group', $row['groups'], time() +(60*60*24*30));
+            }
+          $group = $_COOKIE['group'];
+ 
        // $query= "SELECT groups FROM student WHERE student_id = $studentId";
         if (!($result = mysqli_query($link, $query))){
             printError(sprintf("Error %s : %s", mysqli_errno($link), mysqli_error($link)));
@@ -98,6 +104,7 @@ table, th, td {
             
                
         }
+        
     
     $query= "SELECT student_id FROM students WHERE groups IN (SELECT DISTINCT groups FROM students WHERE student_id = $studentId)";
      if (!($result = mysqli_query($link, $query)))
@@ -127,34 +134,77 @@ table, th, td {
        
         }
 
+         if (isset($_POST['delete'])){
+            $selected_id =$_POST['stuid'];
+             $query= "DELETE from ratings WHERE rated_id = $selected_id";
+             
+     $result = mysqli_query($link, $query);
+             
+                echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 25px"> Record Deleted ';
+         
+
+            }  
+       
+    
+        if (isset($_POST['update'])){
+             $selected_id =$_POST['stuid'];
+         $rating = $_POST['rating'];
+ 
+         $comment = mysqli_real_escape_string($link, trim($_POST['comment']));
+        
+     
+            $query = "UPDATE ratings SET rating=$rating, comment = '$comment'  WHERE rated_id = $selected_id AND rater_id=$studentId";
+             $result = mysqli_query($link, $query);
+                echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 25px"> record updated!!';
+            
+        }
+         
          
      
      if (isset($_POST['ratestudent'])){
             $selected_id =$_POST['stuid'];
          $rating = $_POST['rating'];
          $comment = mysqli_real_escape_string($link, trim($_POST['comment']));
-
+        
          $userfile =$_POST['userfile']; 
            // echo $selected_id;
-         
+         if (isset($_POST['frating'])){
             
-             $query= "INSERT INTO ratings (rater_id, rating, comment, image, rated_id) VALUES 
-             ('$studentId', $rating, '$comment', '$userfile', '$selected_id')";
+           $query= "INSERT INTO ratings (rater_id, rating, comment, image, rated_id, final_rating, groups) VALUES 
+             ('$studentId', $rating, '$comment', '$userfile', '$selected_id', $rating, $group)";
      $result = mysqli_query($link, $query);
-          
-                echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 25px"> Student Rated!!';
-         
-            
-            $comment="";
-            $userfile="";
+             
+             $query =  "SELECT grade FROM students WHERE student_id = $selected_id";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==1){
+                             
+             
+          $query = "UPDATE students SET grade= ($rating+ $rating)/2 WHERE student_id = $selected_id";
+             $result = mysqli_query($link, $query);
+                echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 25px"> Final grade udpated!!';
+                             
     
+        } else {
+           
+                             
+                      $query= "INSERT INTO students (rater_id) VALUES 
+             ('$rating') WHERE student_id= $selected_id";
+     $result = mysqli_query($link, $query);       
+             echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 25px"> Student Rated!!';
         }
          
 
        
+     } else {
+             
+             
+           $query= "INSERT INTO ratings (rater_id, rating, comment, image, rated_id) VALUES 
+             ('$studentId', $rating, '$comment', '$userfile', '$selected_id')";
+     $result = mysqli_query($link, $query);
+             echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 25px"> Student Rated!!';
+     }
 
-
-
+     }
 ?>
         <div class="container"><br>
 		
@@ -183,13 +233,13 @@ table, th, td {
 				</div>
                 
 				<div class="form-group">
-					  <input type="checkbox" name="finalrating" value="finalrating">Finalise Rating<br>
+					  <input type="checkbox" id="final_rating" name="final_rating" value="finalrating">Finalise<br>
 				</div>
                 
 
 				<div class="form-group">
 					<label class="font-weight-bold"> Comment </label>
-					<textarea rows="4" cols= "50" name="comment" class="form-control" id="comment">
+					<textarea rows="4" cols= "50" name="comment" class="form-control" id="comment" value="<?php echo $commentt ?>" >
                     </textarea>
 					
 				</div>
@@ -209,26 +259,50 @@ table, th, td {
  <?php
 echo $opt;
                 
+    
                 
                  $query = "SELECT rating FROM ratings WHERE rater_id = $studentId";
                          $result = mysqli_query($link, $query); 
-                         if (mysqli_num_rows($result) >=3){
+                         if (mysqli_num_rows($result) >=2){
                              echo '<input type="submit" id="ratestudent" disabled';
+                          
                          }  else {
                              echo "";
                          }
+            
+                      
                 
                 
-                    
-$link->close();
+
 
 ?>
               
    
 	<input type="submit" id="ratestudent" name="ratestudent" value="Submit" class="btn btn-success">
              
-                <input type="submit" id="delete" name="delete" value="Delete" class="btn btn-success">
                 
+                
+                <?php 
+                 $query = "SELECT final_rating FROM ratings WHERE rater_id = $studentId";
+                         $result = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($result) >=2){
+                             echo '<input type="submit" id="delete" disabled';
+                          
+                         }  else {
+                             echo "";
+                         }
+                
+                                
+                    
+                    $link->close();
+              ?>
+    <input type="submit" id="delete" name="delete" value="Delete" class="btn btn-success">
+                
+                
+                 
+               
+                 
+	<input type="submit" id="update" name="update" value="Change" class="btn btn-success">
                                 
 </form><br><br>
 

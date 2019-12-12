@@ -24,15 +24,7 @@ $email=$_SESSION['email'];
 }
 
 
-/*setcookie('user', $_POST['user'], time()+3600);
-setcookie('email', $_POST['user'], time()+3600);*/
 
-
-
-      /*  $host = 'localhost';
-        $userr = 'waseem';
-        $passwd= 'localhost';
-        $dbname= 'waseem';*/
 
 require_once('connection.php');
         $query='SHOW TABLES';

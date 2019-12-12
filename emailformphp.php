@@ -20,6 +20,7 @@ error_reporting(0);
         $mailbody =mysqli_real_escape_string($link, trim($_POST['ebody']));
         $subject =mysqli_real_escape_string($link, trim($_POST['subject']));
         $groupId = $_POST['groupno'];
+$groupId2 = $_POST['groupno2'];
   $studentId = $_COOKIE['user'];
     
 ?>
@@ -27,6 +28,7 @@ error_reporting(0);
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
 	<title></title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
@@ -48,20 +50,62 @@ error_reporting(0);
 			
 			<form method="post" id="myForm" action="<?php echo $_SERVER['PHP_SELF'];?>"  class="bg-light">
                 <div style="padding: 25px; background-color: #98AFC7;">                                  
-               <label class="font-weight-bold">Select Group</label>
+               <label class="font-weight-bold">Select Completed Group</label>
             <select name="groupno" id="groupno">
                 
-                 <option value="1">Group 1</option>
-                 <option value="2">Group 2</option>
-                 <option value="3">Group 3</option>
-                 <option value="4">Group 4</option>
-                 <option value="5">Group 5</option>
-                 <option value="6">Group 6</option>
-                 <option value="7">Group 7</option>
-                 <option value="8">Group 8</option>
-                 <option value="9">Group 9</option>
-                 <option value="10">Group 10</option>    
+                 <option value="1"  <?php $query = "SELECT groups FROM ratings WHERE groups = 1";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) !=6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 1</option>
+                 <option value="2"  <?php $query = "SELECT groups FROM ratings WHERE groups = 2";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) !=6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 2</option>
+                 <option value="3"  <?php $query = "SELECT groups FROM ratings WHERE groups = 3";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) !=6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 3</option>
+                 <option value="4" <?php $query = "SELECT groups FROM ratings WHERE groups = 4";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) !=6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 4</option>
+                 <option value="5"  <?php $query = "SELECT groups FROM ratings WHERE groups = 5";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) !=6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 5</option>
+                 <option value="6" <?php $query = "SELECT groups FROM ratings WHERE groups = 6";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) !=6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 6</option>
+                 <option value="7"  <?php $query = "SELECT groups FROM ratings WHERE groups = 7";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) !=6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 7</option>
+                 <option value="8"  <?php $query = "SELECT groups FROM ratings WHERE groups = 8";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) !=6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 8</option>
+                 <option value="9"  <?php $query = "SELECT groups FROM ratings WHERE groups = 9";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) !=6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 9</option>
+                 <option value="10"  <?php $query = "SELECT groups FROM ratings WHERE groups = 10";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) !=6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 10</option>    
             </select>
+                    
+				<input type="submit" name="sendgrade" value="Send Final Grades" id="submit" class="btn btn-success" 	autocomplete="off">
                 </div>
 				
 				
@@ -70,13 +114,69 @@ error_reporting(0);
 		
 				
 
+        <div style="padding: 25px; background-color: #E5E4E2;">                                  
+               <label class="font-weight-bold">Select incomplete Group for Reminder</label>
+            <select name="groupno2" id="groupno2">
+                
+                 <option value="1"  <?php $query = "SELECT groups FROM ratings WHERE groups = 1";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 1</option>
+                 <option value="2"  <?php $query = "SELECT groups FROM ratings WHERE groups = 2";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 2</option>
+                 <option value="3"  <?php $query = "SELECT groups FROM ratings WHERE groups = 3";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 3</option>
+                 <option value="4" <?php $query = "SELECT groups FROM ratings WHERE groups = 4";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 4</option>
+                 <option value="5"  <?php $query = "SELECT groups FROM ratings WHERE groups = 5";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 5</option>
+                 <option value="6" <?php $query = "SELECT groups FROM ratings WHERE groups = 6";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 6</option>
+                 <option value="7"  <?php $query = "SELECT groups FROM ratings WHERE groups = 7";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 7</option>
+                 <option value="8"  <?php $query = "SELECT groups FROM ratings WHERE groups = 8";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 8</option>
+                 <option value="9"  <?php $query = "SELECT groups FROM ratings WHERE groups = 9";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 9</option>
+                 <option value="10"  <?php $query = "SELECT groups FROM ratings WHERE groups = 10";
+                         $data = mysqli_query($link, $query); 
+                         if (mysqli_num_rows($data) ==6){
+                             echo "<select='groupno' id='groupno' disabled";
+                         }?>>Group 10</option>    
+            </select>
+            
 				<input type="submit" name="reminder" value="Send Reminder" id="reminder" class="btn btn-success" 	autocomplete="off">
+                </div>
+                
 				
-        
 
-				<input type="submit" name="submit" value="Send Final Grades" id="submit" class="btn btn-success" 	autocomplete="off">
 <?php
-                if (isset($_POST['submit'])){
+                if (isset($_POST['sendgrade'])){
                    
             
           $query= "SELECT student_id, email, grade FROM students WHERE groups = $groupId";
@@ -89,6 +189,30 @@ error_reporting(0);
              $grade= $row['grade'];
              $msg = "Dear Student, \n $student"; 
              $msg.= " Your Final Grades are: $grade";
+            $msg.=  " $mailbody";
+                mail($to,  $msg, 'From:'.$from);
+             
+             echo '<p class="text-white text-center font-weight-bold bg-success" style="font-size: 15px">'.$msg.'<br/>';
+             echo '<p class="text-yellow text-center font-weight-bold bg-success" style="font-size: 15px">Email sent to: '.$to;
+           
+            }  
+       
+ }
+                
+                
+                if (isset($_POST['reminder'])){
+                   
+            
+          $query= "SELECT student_id, email, grade FROM students WHERE groups = $groupId2";
+    
+       $result = mysqli_query($link, $query) or die('Error querying database');
+            
+         while($row=mysqli_fetch_array($result)){
+                $student= $row['student_id'];
+                $to =$row['email'];
+            
+             $msg = "Dear Student, \n $student"; 
+             $msg.= " You need to complete Peer Review";
             $msg.=  " $mailbody";
                 mail($to,  $msg, 'From:'.$from);
              
